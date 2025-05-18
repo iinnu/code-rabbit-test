@@ -1,0 +1,88 @@
+---
+import { url } from 'utils/url';
+
+import { SITE_CONFIG } from 'constants/site-config';
+import { PROFILE_CONFIG } from 'constants/profile-config';
+import { DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE } from 'constants/theme';
+
+import 'styles/variable.css';
+import 'styles/global.css';
+
+interface Props {
+  title?: string;
+  banner?: string;
+  description?: string;
+  lang?: string;
+  ogType?: 'article' | 'website';
+}
+
+let { title, description, lang, ogType = 'website' } = Astro.props;
+let pageTitle = title ? `${title} - ${SITE_CONFIG.title}` : `${SITE_CONFIG.title} - ${SITE_CONFIG.subtitle}`;
+---
+
+<!doctype html>
+<html lang={lang} class="bg-[var(--page-bg)] transition text-[14px] md:text-[16px]">
+  <head>
+    <title>{pageTitle}</title>
+
+    <meta charset="UTF-8" />
+    <meta name="description" content={description || pageTitle} />
+    <meta name="author" content={PROFILE_CONFIG.name} />
+    <meta name="viewport" content="width=device-width" />
+
+    <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:site_name" content={SITE_CONFIG.title} />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description || pageTitle} />
+    <meta property="og:type" content={ogType} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description || pageTitle} />
+
+    {
+      SITE_CONFIG.favicon.map(favicon => (
+        <link rel="icon" href={favicon.src.startsWith('/') ? url(favicon.src) : favicon.src} sizes={favicon.sizes} />
+      ))
+    }
+
+    <!-- Set the theme before the page is rendered to avoid a flash of the default theme -->
+    <script is:inline define:vars={{ DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE }}>
+      // Load the theme from local storage
+      const theme = localStorage.getItem('theme') || DEFAULT_THEME;
+
+      const setLightMode = () => {
+        document.documentElement.classList.remove('dark');
+      };
+
+      const setDarkMode = () => {
+        document.documentElement.classList.add('dark');
+      };
+
+      switch (theme) {
+        case LIGHT_MODE:
+          setLightMode();
+          break;
+        case DARK_MODE:
+          setDarkMode();
+          break;
+        case AUTO_MODE:
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setDarkMode();
+          } else {
+            setLightMode();
+          }
+      }
+    </script>
+  </head>
+
+  <body class="min-h-screen transition">
+    <slot />
+
+    <!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
+    <div id="page-height-extend" class="hidden h-[300vh]"></div>
+  </body>
+</html>

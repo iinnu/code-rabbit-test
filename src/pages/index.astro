@@ -1,37 +1,7 @@
 ---
-import { url } from 'utils/url';
-
-import { DEFAULT_FAVICONS } from 'constants/favicon';
-import { SITE_CONFIG } from 'constants/site-config';
-
-interface Props {
-  title?: string;
-  description?: string;
-}
-
-const { title, description }: Props = Astro.props;
-
-let pageTitle: string;
-if (title) {
-  pageTitle = `${title} - ${SITE_CONFIG.title}`;
-} else {
-  pageTitle = `${SITE_CONFIG.title} - ${SITE_CONFIG.subtitle}`;
-}
+import BaseHead from 'components/layout/BaseHead.astro';
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="description" content={description || title} />
-
-    {DEFAULT_FAVICONS.map(favicon => <link rel="icon" href={favicon.src.startsWith('/') ? url(favicon.src) : favicon.src} sizes={favicon.sizes} />)}
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{pageTitle}</title>
-  </head>
-
-  <body>
-    <h1>Astro</h1>
-  </body>
-</html>
+<BaseHead>
+  <h1>hi</h1>
+</BaseHead>
