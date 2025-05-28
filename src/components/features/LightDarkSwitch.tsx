@@ -1,8 +1,6 @@
-import clsx from 'clsx';
-
 import { useTheme } from 'hooks/useTheme';
 
-import { AUTO_MODE, DARK_MODE, LIGHT_MODE } from 'constants/theme';
+import { AUTO_MODE, DARK_MODE, LIGHT_MODE, THEME_MODES } from 'constants/theme';
 
 const MODE_ICON = {
   [AUTO_MODE]: <AutoIcon />,
@@ -24,15 +22,24 @@ function LightDarkSwitch() {
   };
 
   const toggleTheme = () => {
-    setMode(mode === DARK_MODE ? LIGHT_MODE : DARK_MODE);
+    const length = THEME_MODES.length;
+    let i = 0;
+    for (; i < length; i++) {
+      if (THEME_MODES[i] === mode) {
+        break;
+      }
+    }
+
+    setMode(THEME_MODES[(i + 1) % length]);
   };
 
   return (
-    <>
+    <div role="menu" onMouseLeave={hideFloatMenu}>
       <button
         type="button"
         onClick={toggleTheme}
         className="btn-plain relative scale-animation active:scale-90 rounded-lg h-11 w-11"
+        onMouseEnter={showFloatMenu}
       >
         {MODE_ICON[mode]}
       </button>
@@ -40,24 +47,42 @@ function LightDarkSwitch() {
       <div
         id="theme-float-menu"
         role="menu"
-        className="absolute transition float-panel-closed top-11 bg-[var(--float-panel-bg)] p-2 rounded-lg"
+        className="hidden absolute transition float-panel-closed top-16 bg-[var(--float-panel-bg)] p-2 rounded-lg"
       >
-        <button type="button" role="menuitem" className="btn-plain" onClick={() => setMode(AUTO_MODE)}>
+        <button
+          type="button"
+          role="menuitem"
+          className="btn-plain scale-animation p-2 rounded-lg gap-2 w-full justify-start"
+          class:current-theme-btn={mode === LIGHT_MODE}
+          onClick={() => setMode(LIGHT_MODE)}
+        >
           <SunIcon />
           <span>Light</span>
         </button>
 
-        <button type="button" role="menuitem" className="btn-plain" onClick={() => setMode(AUTO_MODE)}>
+        <button
+          type="button"
+          role="menuitem"
+          className="btn-plain scale-animation p-2 rounded-lg gap-2 w-full justify-start"
+          class:current-theme-btn={mode === DARK_MODE}
+          onClick={() => setMode(DARK_MODE)}
+        >
           <MoonIcon />
           <span>Dark</span>
         </button>
 
-        <button type="button" role="menuitem" className="btn-plain" onClick={() => setMode(AUTO_MODE)}>
+        <button
+          type="button"
+          role="menuitem"
+          className="btn-plain scale-animation p-2 rounded-lg gap-2 w-full justify-start"
+          class:current-theme-btn={mode === AUTO_MODE}
+          onClick={() => setMode(AUTO_MODE)}
+        >
           <AutoIcon />
-          <span>Auto</span>
+          <span>System</span>
         </button>
       </div>
-    </>
+    </div>
   );
 }
 
