@@ -8,6 +8,13 @@ const MODE_ICON = {
   [LIGHT_MODE]: <SunIcon />,
 };
 
+/**
+ * Renders a theme switcher UI that allows users to toggle between light, dark, and system (auto) theme modes.
+ *
+ * Displays a button showing the current theme mode icon. Clicking the button cycles through available theme modes. Hovering over the button reveals a floating menu for direct selection of a specific mode.
+ *
+ * @remark The floating menu is shown or hidden based on mouse events and is controlled via direct DOM manipulation.
+ */
 function LightDarkSwitch() {
   const { mode, setMode } = useTheme();
 
