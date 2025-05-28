@@ -5,8 +5,9 @@ import { SITE_CONFIG } from 'constants/site-config';
 import { PROFILE_CONFIG } from 'constants/profile-config';
 import { DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE } from 'constants/theme';
 
-import 'styles/variable.css';
+import 'styles/colors.css';
 import 'styles/global.css';
+import 'styles/layout.css';
 
 interface Props {
   title?: string;
@@ -28,7 +29,7 @@ let pageTitle = title ? `${title} - ${SITE_CONFIG.title}` : `${SITE_CONFIG.title
     <meta charset="UTF-8" />
     <meta name="description" content={description || pageTitle} />
     <meta name="author" content={PROFILE_CONFIG.name} />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <meta name="generator" content={Astro.generator} />
 

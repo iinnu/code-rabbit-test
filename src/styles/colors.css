@@ -1,5 +1,5 @@
 :root {
-  --hue: 250;
+  --hue: 280;
 
   /* Light mode */
   --primary: oklch(0.7 0.14 var(--hue));
